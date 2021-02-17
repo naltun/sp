@@ -15,7 +15,7 @@ check_args() {
 
 construct_scan() {
     scan="nc -z"
-    [ "$3" = "-u" ] || [ "$3" = "--udp" ] && scan+="u"
+    [ "$3" = "-u" ] || [ "$3" = "--udp" ] && scan="$scan -u"
     echo "$scan"
 }
 
