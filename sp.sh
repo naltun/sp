@@ -13,6 +13,14 @@ check_args() {
     [ -z "$2" ] && help && exit 2
 }
 
+check_host_avail() {
+    if ping -c 1 -W 1 "$1" >/dev/null 2>&1; then
+        return
+    else
+        echo "$1 is not available."; exit 3
+    fi
+}
+
 construct_scan() {
     scan="nc -z"
     [ "$3" = "-u" ] || [ "$3" = "--udp" ] && scan="$scan -u"
@@ -37,6 +45,7 @@ run() {
 
 main() {
     check_args "$@"
+    check_host_avail "$1"
     run "$@"
 }
 
