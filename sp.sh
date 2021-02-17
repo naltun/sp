@@ -4,7 +4,7 @@
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 help() {
-    echo "USAGE: sp [hostname] [port[s]]"
+    echo "USAGE: sp [hostname] [port[s]] [-u|--udp]"
     echo "Eg. sp scanme.nmap.org 22-100"
 }
 
@@ -13,17 +13,24 @@ check_args() {
     [ -z "$2" ] && help && exit 2
 }
 
+construct_scan() {
+    scan="nc -z"
+    [ -n "$3" ] && scan+="u"
+    echo "$scan"
+}
+
 run() {
+    scan_cmd=$(construct_scan "$@")
     case "$2" in
         *-*)
             start_port=$(echo "$2" | awk '{split($0, ports, "-"); print ports[1]}')
             end_port=$(echo "$2"   | awk '{split($0, ports, "-"); print ports[2]}')
             for port in $(seq "$start_port" "$end_port"); do
-                nc -z "$1" "$port"
+                eval "$scan_cmd $1 $port"
             done
             ;;
         *)
-            nc -z "$1" "$2"
+            eval "$scan_cmd $1 $2"
             ;;
     esac
 }
