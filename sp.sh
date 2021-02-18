@@ -38,7 +38,6 @@ run() {
             done
             ;;
         *)
-            verify_port "$2"
             eval "$scan_cmd $1 $2"
             ;;
     esac
