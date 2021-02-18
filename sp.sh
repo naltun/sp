@@ -27,17 +27,23 @@ construct_scan() {
     echo "$scan"
 }
 
+verify_port() {
+
+}
+
 run() {
     scan_cmd=$(construct_scan "$@")
     case "$2" in
         *-*)
             start_port=$(echo "$2" | awk '{split($0, ports, "-"); print ports[1]}')
-            end_port=$(echo "$2"   | awk '{split($0, ports, "-"); print ports[2]}')
+            end_port=$(echo "$2" | awk '{split($0, ports, "-"); print ports[2]}')
+            for port in "$start_port" "$end_port"; do verify_port "$port"; done
             for port in $(seq "$start_port" "$end_port"); do
                 eval "$scan_cmd $1 $port"
             done
             ;;
         *)
+            verify_port "$2"
             eval "$scan_cmd $1 $2"
             ;;
     esac

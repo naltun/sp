@@ -11,7 +11,7 @@ A simple port scanner that uses only POSIX-compliant utilities. This means it sh
 
 HOWTO
 
-sp [hostname] [port[s]]
+sp [hostname] [port[s]] [-u|--udp]
 
 LICENSE
 
